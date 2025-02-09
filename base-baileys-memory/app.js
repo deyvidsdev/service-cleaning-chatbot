@@ -118,29 +118,25 @@ async function getChatResponse(historial) {
   try {
 
       const messages = [
-          { role: 'system', content: prompt},
+          { role: 'system', content: prompt },
           ...historial
       ];
       
       console.log("messages", messages);
 
       const openai = new OpenAI({
-        baseURL: 'http://localhost:11434/v1',
-        apiKey: 'ollama',
-      });
+        apiKey: process.env.OPENAI_API_KEY,
+      })
       
       const response = await openai.chat.completions.create({
-        model: 'deepseek-r1:7b',
+        model: 'gpt-3.5-turbo',
         messages: messages,
+
       });
 
       console.log("response", response);
 
-      // Asegúrate de que la respuesta contiene contenido de texto
       let botResponse = response?.choices?.[0]?.message?.content || '';
-
-      // Elimina las etiquetas <think>...</think> si las hay
-      botResponse = botResponse.replace(/<think>[\s\S]*?<\/think>/g, '');
 
       return botResponse || "Lo siento, no pude entender tu solicitud.";
   } catch (error) {
@@ -188,8 +184,8 @@ const flowCotizacion = addKeyword("COTIZAR_SERVICIO")
     await state.update({ history_chat: history });
   }
 })
-.addAction({capture: true}, async (ctx, {state, flowDynamic, gotoFlow}) => {
-
+.addAction({capture: true, idle: 15000}, async (ctx, {state, flowDynamic, gotoFlow}) => {
+  
   const message = ctx.body;
   const myState = state.getMyState();
 
@@ -207,7 +203,7 @@ const flowCotizacion = addKeyword("COTIZAR_SERVICIO")
 
   const response = await getChatResponse(history);
 
-  if (response.includes("ESPERAR_ACESOR")) {
+  if (response.includes("ESPERAR_ASESOR")) {
     return gotoFlow(flowEsperaAcesor);
   }
   

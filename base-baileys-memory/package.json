@@ -17,6 +17,7 @@
         "@bot-whatsapp/provider": "latest",
         "@whiskeysockets/baileys": "6.5.0",
         "cache-manager": "5.2.4",
+        "dotenv": "^16.4.7",
         "ollama": "^0.5.12",
         "openai": "^4.83.0",
         "wa-sticker-formatter": "4.4.4"
