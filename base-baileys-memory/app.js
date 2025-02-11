@@ -4,6 +4,8 @@ const QRPortalWeb = require('@bot-whatsapp/portal')
 const BaileysProvider = require('@bot-whatsapp/provider/baileys')
 const MockAdapter = require('@bot-whatsapp/database/mock')
 
+require('dotenv').config();
+
 const OpenAI = require('openai')
 
 const Servicios = [
@@ -125,7 +127,7 @@ async function getChatResponse(historial) {
       console.log("messages", messages);
 
       const openai = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY
       })
       
       const response = await openai.chat.completions.create({
@@ -203,7 +205,7 @@ const flowCotizacion = addKeyword("COTIZAR_SERVICIO")
 
   const response = await getChatResponse(history);
 
-  if (response.includes("ESPERAR_ASESOR")) {
+  if (response.includes("ESPERAR_ACESOR")) {
     return gotoFlow(flowEsperaAcesor);
   }
   
